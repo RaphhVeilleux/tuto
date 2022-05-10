@@ -6,13 +6,14 @@ let score;
 let meilleurScore;
 let joueur;
 let gravité; //gravité
-let obstacle;
+let obstacles = [];
 let vitesseDuJeu;
 let touches = {};
 
 //Event listeners
 document.addEventListener('keydown', function(event){
   touches[event.code] = true;
+  console.log(event.code);
 });
 document.addEventListener('keyup', function(event){
   touches[event.code] = false;
@@ -33,13 +34,22 @@ class Dino {
     this.auSol = false;
     this.tempsDuSaut = 0;
   }
+
   animer(){
     //Saut
     if (touches['Space']) {
-      console.log('Jump');
+      console.log('Saut!');
       this.sauter();
     } else {
       this.tempsDuSaut = 0;
+    }
+
+    //Accroupir
+    if (touches['ArrowDown']) {
+      console.log('Accroupir');
+      this.h = this.hauteurOriginelle / 2;
+    } else {
+      this.h = this.hauteurOriginelle;
     }
 
     this.y = this.y + this.dy;
@@ -81,6 +91,48 @@ class Dino {
   }
 }
 
+class Cactus {
+  constructor(x, y, l, h, c){
+    this.x = x;
+    this.y = y;
+    this.l = l;
+    this.h = h;
+    this.c = c;
+
+    this.dx = -vitesseDuJeu;
+  }
+
+  deplacer(){
+    this.x = this.x + this.dx;
+    this.dessiner();
+    this.dx = -vitesseDuJeu;
+  }
+
+  dessiner(){
+    c.beginPath();
+    c.fillStyle = this.c;
+    c.fillRect(this.x, this.y, this.l, this.h);
+    c.closePath();
+  }
+}
+
+
+function creerObstacle(){
+ let grosseurDeObstacle = entierAleatoire(20, 70);
+ //console.log(grosseurDeObstacle)
+ let typeDeObstacle = entierAleatoire(0, 1);
+ let obstacle = new Cactus( canvas.width + grosseurDeObstacle, canvas.height - grosseurDeObstacle, grosseurDeObstacle, grosseurDeObstacle, "Green");
+
+ if (typeDeObstacle == 1) {
+   obstacle.y -= joueur.hauteurOriginelle - 10;
+ }
+ obstacles.push(obstacle);
+}
+
+function entierAleatoire(min, max){
+  return Math.round(Math.random() * (max - min) + min);
+}
+
 function demarrer(){
   //dimensions du canvas
   canvas.width = window.innerWidth;
@@ -99,9 +151,22 @@ function demarrer(){
   requestAnimationFrame(animate);
 }
 
+let initialSpawnTimer = 200;
+let spawnTimer = initialSpawnTimer;
+
 function animate(){
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
+
+  spawnTimer--;
+  if (spawnTimer <= 0) {
+    creerObstacle();
+    console.log(obstacles);
+    spawnTimer = initialSpawnTimer - vitesseDuJeu * 8;
+  }
+  if (spawnTimer < 60) {
+    spawnTimer = 60;
+  }
 
   joueur.animer();
 
