@@ -72,7 +72,7 @@ class Dino {
     if (this.auSol && this.tempsDuSaut == 0) {
       this.tempsDuSaut = 1;
       this.dy = -this.forceDuSaut; //cahnger force duSaut par -15?
-    } else if (this.tempsDuSaut > 0 && this.tempsDuSaut < 15) {
+    } else if (this.tempsDuSaut > 0 && this.tempsDuSaut < 10) {
       this.tempsDuSaut++;
       this.dy = -this.forceDuSaut /*mettre en com?*/- (this.tempsDuSaut / 50)
     }
@@ -118,13 +118,18 @@ class Cactus {
 
 
 function creerObstacle(){
- let grosseurDeObstacle = entierAleatoire(20, 70);
+ let grosseurDeObstacle = entierAleatoire(30, 80);
  //console.log(grosseurDeObstacle)
  let typeDeObstacle = entierAleatoire(0, 1);
- let obstacle = new Cactus( canvas.width + grosseurDeObstacle, canvas.height - grosseurDeObstacle, grosseurDeObstacle, grosseurDeObstacle, "Green");
+ let obstacle = new Cactus( canvas.width + grosseurDeObstacle, canvas.height - grosseurDeObstacle, grosseurDeObstacle * 0.6, grosseurDeObstacle, "Green");
 
  if (typeDeObstacle == 1) {
-   obstacle.y -= joueur.hauteurOriginelle - 10;
+   obstacle.y -= joueur.hauteurOriginelle - 30;
+
+   obstacle.x = canvas.width + 40;
+   obstacle.l = 40;
+   obstacle.h = 25;
+   obstacle.c = "Red";
  }
  obstacles.push(obstacle);
 }
@@ -151,21 +156,28 @@ function demarrer(){
   requestAnimationFrame(animate);
 }
 
-let initialSpawnTimer = 200;
-let spawnTimer = initialSpawnTimer;
+let délaisDeApparitionInitial = 200;
+let délaisDeApparition = délaisDeApparitionInitial;
 
 function animate(){
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
 
-  spawnTimer--;
-  if (spawnTimer <= 0) {
+  délaisDeApparition--;
+  if (délaisDeApparition <= 0) {
     creerObstacle();
     console.log(obstacles);
-    spawnTimer = initialSpawnTimer - vitesseDuJeu * 8;
+    délaisDeApparition = délaisDeApparitionInitial - vitesseDuJeu * 8;
+
+    if (délaisDeApparition < 60) {
+      délaisDeApparition = 60;
+    }
   }
-  if (spawnTimer < 60) {
-    spawnTimer = 60;
+
+  //creer les ennemis
+  for (var i = 0; i < obstacles.length; i++) {
+    let o = obstacles[i]
+    o.deplacer();
   }
 
   joueur.animer();
