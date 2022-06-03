@@ -3,23 +3,24 @@
   <head>
     <meta charset="utf-8">
     <title>Chrome Dino1 Replica</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sixing: 0;
-      }
-      canvas {
-        display; block;
-        /*border: 1px solid black;*/
-      }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/dino.js"></script>
+    <script src="js/cactus.js"></script>
+    <script src="js/text.js"></script>
   </head>
   <body>
+    <h1>Le p'tit dino google</h1>
+
     <canvas id="jeu" width="640" height="400"></canvas>
-    <div >
-      <img src="https://art.pixilart.com/76c86713151461d.png" alt="dino" hidden>
+    <div style="display: none;">
+      <img id="img-dino" src="images-audio/dino.png">
+      <img id="img-tyro" src="images-audio/tyro2.png">
+      <img id="img-cactus" src="images-audio/cactus.png">
     </div>
-    <script src="main.js"></script>
+
+    <audio id="abc" src="images-audio/Arcade-8-bit-jump.mp3" ></audio>
+    <audio id="def"src="images-audio/gameO.wav" ></audio>
+
+    <script src="js/main.js"></script>
   </body>
 </html>
