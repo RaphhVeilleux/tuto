@@ -1,0 +1,15 @@
+* {
+  padding: 0;
+  /*box-sixing: 0;*/
+  text-align: center;
+}
+#jeu {
+  display: block;
+  border: 1px solid black;
+  text-align: center;
+  margin: auto;
+  background-image: url('backdino2.jpg');
+  background-size: 448px 250px;
+  background-position: bottom left;
+  background-repeat: repeat-x;
+}
